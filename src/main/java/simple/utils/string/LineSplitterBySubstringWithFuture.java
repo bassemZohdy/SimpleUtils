@@ -36,13 +36,11 @@ public class LineSplitterBySubstringWithFuture implements Iterable<String> {
 			}
 
 			private String get() {
-				if (to == line.lastIndexOf(delimiter))
-					to = line.length();
-				else
+				if (!(to == line.length()))
 					to = line.indexOf(delimiter, index);
-				String temp = line.substring(index, to);
+				String s = line.substring(index, to);
 				index = to + 1;
-				return temp;
+				return s;
 			}
 
 			@Override

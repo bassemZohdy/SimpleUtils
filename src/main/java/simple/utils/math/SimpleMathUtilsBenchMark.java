@@ -1,4 +1,5 @@
 package simple.utils.math;
+
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -18,23 +19,10 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
  */
 public class SimpleMathUtilsBenchMark {
 
-	/**
-	 * @param args
-	 * @throws RunnerException
-	 */
-	public static void main(String[] args) throws RunnerException {
-
-		Options opt = new OptionsBuilder().warmupIterations(2)
-				.measurementIterations(3).forks(2).build();
-
-		new Runner(opt).run();
-
-	}
-
 	@Benchmark
-	@BenchmarkMode(Mode.Throughput)
+	@BenchmarkMode(Mode.AverageTime)
 	@OutputTimeUnit(TimeUnit.NANOSECONDS)
-	public void measureThroughputSimple() throws InterruptedException {
+	public void measureAverageTimeSimple() throws InterruptedException {
 		Random r = new Random();
 		int scale = r.nextInt(4 - 1) + 1;
 		double value = r.nextDouble();
@@ -42,9 +30,9 @@ public class SimpleMathUtilsBenchMark {
 	}
 
 	@Benchmark
-	@BenchmarkMode(Mode.Throughput)
+	@BenchmarkMode(Mode.AverageTime)
 	@OutputTimeUnit(TimeUnit.NANOSECONDS)
-	public void measureThroughputCommons() throws InterruptedException {
+	public void measureAverageTimeCommons() throws InterruptedException {
 		Random r = new Random();
 		int scale = r.nextInt(4 - 1) + 1;
 		double value = r.nextDouble();
