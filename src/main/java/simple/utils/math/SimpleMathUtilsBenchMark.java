@@ -1,3 +1,8 @@
+/*
+ * Project : SimpleUtils
+ * Author : bassem.zohdy
+ * Email : bassem.zohdy@gmail.com
+ */
 package simple.utils.math;
 
 import java.util.Random;
@@ -13,12 +18,18 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author bzohdy
- *
+ * The Class SimpleMathUtilsBenchMark.
  */
 public class SimpleMathUtilsBenchMark {
 
+	/**
+	 * Measure average time simple.
+	 *
+	 * @throws InterruptedException
+	 *             the interrupted exception
+	 */
 	@Benchmark
 	@BenchmarkMode(Mode.AverageTime)
 	@OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -29,6 +40,12 @@ public class SimpleMathUtilsBenchMark {
 		SimpleMathUtils.round(value, scale);
 	}
 
+	/**
+	 * Measure average time commons.
+	 *
+	 * @throws InterruptedException
+	 *             the interrupted exception
+	 */
 	@Benchmark
 	@BenchmarkMode(Mode.AverageTime)
 	@OutputTimeUnit(TimeUnit.NANOSECONDS)

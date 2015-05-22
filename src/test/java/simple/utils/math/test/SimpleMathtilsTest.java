@@ -1,3 +1,8 @@
+/*
+ * Project : SimpleUtils
+ * Author : bassem.zohdy
+ * Email : bassem.zohdy@gmail.com
+ */
 package simple.utils.math.test;
 import org.apache.commons.math.util.MathUtils;
 import org.junit.Test;
@@ -5,8 +10,15 @@ import org.junit.Test;
 import simple.utils.math.SimpleMathUtils;
 import static org.junit.Assert.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SimpleMathtilsTest.
+ */
 public class SimpleMathtilsTest  {
 
+	/**
+	 * Test ruond.
+	 */
 	@Test
 	public void TestRuond(){
 		double d = 5.6893;

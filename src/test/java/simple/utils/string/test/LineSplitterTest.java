@@ -1,5 +1,7 @@
-/**
- * 
+/*
+ * Project : SimpleUtils
+ * Author : bassem.zohdy
+ * Email : bassem.zohdy@gmail.com
  */
 package simple.utils.string.test;
 
@@ -17,16 +19,24 @@ import simple.utils.string.LineSplitterBySubstring;
 import simple.utils.string.LineSplitterBySubstringWithFuture;
 import simple.utils.string.RandomString;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author bassem
- *
+ * The Class LineSplitterTest.
  */
 public class LineSplitterTest {
 
+	/** The Constant DELIMITER. */
 	private static final String DELIMITER = ",";
+	
+	/** The Constant DELIMITER_CHAR. */
 	private static final char DELIMITER_CHAR = ',';
+	
+	/** The sample. */
 	private static String sample = null;
 
+	/**
+	 * Inits the.
+	 */
 	@BeforeClass
 	public static void init() {
 		Random r = new Random();
@@ -35,6 +45,9 @@ public class LineSplitterTest {
 		sample = rs.nextDelimitedLine(DELIMITER_CHAR, words);
 	}
 
+	/**
+	 * Test line splitter by char.
+	 */
 	@Test
 	public void testLineSplitterByChar() {
 		LineSplitterByChar splitter = new LineSplitterByChar(sample,
@@ -45,6 +58,9 @@ public class LineSplitterTest {
 
 	}
 
+	/**
+	 * Test line splitter by substring.
+	 */
 	@Test
 	public void testLineSplitterBySubstring() {
 		LineSplitterBySubstring splitter = new LineSplitterBySubstring(sample,
@@ -55,6 +71,9 @@ public class LineSplitterTest {
 
 	}
 
+	/**
+	 * Test line splitter by substring with future.
+	 */
 	@Test
 	public void testLineSplitterBySubstringWithFuture() {
 		LineSplitterBySubstringWithFuture splitter = new LineSplitterBySubstringWithFuture(

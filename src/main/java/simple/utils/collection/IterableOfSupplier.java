@@ -1,3 +1,8 @@
+/*
+ * Project : SimpleUtils
+ * Author : bassem.zohdy
+ * Email : bassem.zohdy@gmail.com
+ */
 package simple.utils.collection;
 
 import java.util.Iterator;
@@ -5,17 +10,44 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class IterableOfSupplier.
+ *
+ * @param <T>
+ *            the generic type
+ */
 public class IterableOfSupplier<T> implements Iterable<T> {
+	
+	/** The supplier. */
 	final private Supplier<T> supplier;
 
+	/**
+	 * Instantiates a new iterable of supplier.
+	 *
+	 * @param supplier
+	 *            the supplier
+	 */
 	private IterableOfSupplier(Supplier<T> supplier) {
 		this.supplier = supplier;
 	}
 
+	/**
+	 * Of.
+	 *
+	 * @param <T>
+	 *            the generic type
+	 * @param supplier
+	 *            the supplier
+	 * @return the iterable of supplier
+	 */
 	public static <T> IterableOfSupplier<T> of(Supplier<T> supplier) {
 		return new IterableOfSupplier<T>(supplier);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Iterable#iterator()
+	 */
 	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {

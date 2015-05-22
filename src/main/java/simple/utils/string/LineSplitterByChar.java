@@ -1,17 +1,41 @@
+/*
+ * Project : SimpleUtils
+ * Author : bassem.zohdy
+ * Email : bassem.zohdy@gmail.com
+ */
 package simple.utils.string;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
  
+// TODO: Auto-generated Javadoc
+/**
+ * The Class LineSplitterByChar.
+ */
 public class LineSplitterByChar implements Iterable<String> {
+	
+	/** The line. */
 	private final String line;
+	
+	/** The delimiter. */
 	private final char delimiter;
  
+	/**
+	 * Instantiates a new line splitter by char.
+	 *
+	 * @param line
+	 *            the line
+	 * @param delimiter
+	 *            the delimiter
+	 */
 	public LineSplitterByChar(String line, char delimiter) {
 		this.line = line;
 		this.delimiter = delimiter;
 	}
  
+	/* (non-Javadoc)
+	 * @see java.lang.Iterable#iterator()
+	 */
 	@Override
 	public Iterator<String> iterator() {
 		return new Iterator<String>() {

@@ -1,18 +1,42 @@
+/*
+ * Project : SimpleUtils
+ * Author : bassem.zohdy
+ * Email : bassem.zohdy@gmail.com
+ */
 package simple.utils.string;
 
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class LineSplitterBySubstringWithFuture.
+ */
 public class LineSplitterBySubstringWithFuture implements Iterable<String> {
+	
+	/** The line. */
 	private final String line;
+	
+	/** The delimiter. */
 	private final char delimiter;
 
+	/**
+	 * Instantiates a new line splitter by substring with future.
+	 *
+	 * @param line
+	 *            the line
+	 * @param delimiter
+	 *            the delimiter
+	 */
 	public LineSplitterBySubstringWithFuture(String line, char delimiter) {
 		this.line = line;
 		this.delimiter = delimiter;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Iterable#iterator()
+	 */
 	@Override
 	public Iterator<String> iterator() {
 		return new Iterator<String>() {
