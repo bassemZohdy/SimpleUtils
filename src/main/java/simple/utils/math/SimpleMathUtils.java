@@ -24,4 +24,32 @@ public class SimpleMathUtils {
 		double power = Math.pow(10, scale);
 		return Math.round(value * power) / power;
 	}
+
+	/**
+	 * Floor.
+	 *
+	 * @param value
+	 *            the value
+	 * @param scale
+	 *            the scale
+	 * @return the double
+	 */
+	public static double floor(double value, int scale) {
+		double power = Math.pow(10, scale);
+		return Math.floor(value * power) / power;
+	}
+
+	/**
+	 * Ceil.
+	 *
+	 * @param value
+	 *            the value
+	 * @param scale
+	 *            the scale
+	 * @return the double
+	 */
+	public static double ceil(double value, int scale) {
+		double power = Math.pow(10, scale);
+		return Math.ceil(value * power) / power;
+	}
 }
