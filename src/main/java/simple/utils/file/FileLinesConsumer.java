@@ -35,7 +35,7 @@ public class FileLinesConsumer<T> {
 	private final Consumer<T> consumer;
 
 	/** The buffer size. */
-	private int bufferSize = 124 * 8;
+	private int bufferSize = 1024 * 8;
 
 	/**
 	 * Instantiates a new file lines consumer.
