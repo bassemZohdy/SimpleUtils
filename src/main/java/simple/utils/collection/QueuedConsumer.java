@@ -6,13 +6,14 @@
 package simple.utils.collection;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class QueuedConsumer.
  *
@@ -22,25 +23,65 @@ import java.util.function.Consumer;
 public class QueuedConsumer<T> implements Consumer<T> {
 	
 	/** The queue. */
-	private BlockingQueue<Event<T>> queue = new LinkedBlockingQueue<>();
+	private BlockingQueue<T> queue = new LinkedBlockingQueue<>();
 	
 	/** The stop. */
 	private AtomicBoolean stop = new AtomicBoolean(false);
 	
 	/** The consumer. */
 	private final Consumer<T> consumer;
+	
+	/** The when to stop. */
+	private final Predicate<T> whenToStop;
+	
+	/** The queue executor. */
+	private final Executor queueExecutor;
 
 	/**
 	 * Instantiates a new queued consumer.
 	 *
-	 * @param consumer
-	 *            the consumer
+	 * @param consumer            the consumer
+	 * @param whenToStop the when to stop
+	 * @param executor the executor
+	 */
+	private QueuedConsumer(Consumer<T> consumer, Predicate<T> whenToStop,
+			Executor executor) {
+		this.consumer = consumer;
+		if (whenToStop != null)
+			this.whenToStop = whenToStop;
+		else
+			this.whenToStop = (t) -> false;
+		if (executor != null)
+			queueExecutor = executor;
+		else
+			queueExecutor = Executors.newSingleThreadExecutor();
+		start();
+	}
+	
+	/**
+	 * Start.
+	 */
+	public void start() {
+		queueExecutor.execute(() -> run());
+	}
+
+	/**
+	 * Instantiates a new queued consumer.
+	 *
+	 * @param consumer the consumer
+	 * @param whenToStop the when to stop
+	 */
+	private QueuedConsumer(Consumer<T> consumer, Predicate<T> whenToStop) {
+		this(consumer, whenToStop, null);
+	}
+
+	/**
+	 * Instantiates a new queued consumer.
+	 *
+	 * @param consumer the consumer
 	 */
 	private QueuedConsumer(Consumer<T> consumer) {
-		this.consumer = consumer;
-		ExecutorService executor = Executors.newSingleThreadExecutor();
-		executor.execute(() -> run());
-		executor.shutdown();
+		this(consumer, null, null);
 	}
 
 	/* (non-Javadoc)
@@ -49,24 +90,61 @@ public class QueuedConsumer<T> implements Consumer<T> {
 	@Override
 	public void accept(T t) {
 		try {
-			queue.put(new Event<T>(t));
+			queue.put(t);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
-			throw new RuntimeException(e);
 		}
 	}
 
 	/**
 	 * Of.
 	 *
-	 * @param <T>
-	 *            the generic type
-	 * @param consumer
-	 *            the consumer
+	 * @param <T> the generic type
+	 * @param consumer the consumer
+	 * @param whenToStop the when to stop
+	 * @param executor the executor
+	 * @return the queued consumer
+	 */
+	public static <T> QueuedConsumer<T> of(Consumer<T> consumer,
+			Predicate<T> whenToStop, Executor executor) {
+		return new QueuedConsumer<>(consumer, whenToStop, executor);
+	}
+
+	/**
+	 * Of.
+	 *
+	 * @param <T> the generic type
+	 * @param consumer the consumer
+	 * @param whenToStop the when to stop
+	 * @return the queued consumer
+	 */
+	public static <T> QueuedConsumer<T> of(Consumer<T> consumer,
+			Predicate<T> whenToStop) {
+		return new QueuedConsumer<>(consumer, whenToStop);
+	}
+
+	/**
+	 * Of.
+	 *
+	 * @param <T> the generic type
+	 * @param consumer the consumer
 	 * @return the queued consumer
 	 */
 	public static <T> QueuedConsumer<T> of(Consumer<T> consumer) {
 		return new QueuedConsumer<>(consumer);
+	}
+
+	/**
+	 * Of.
+	 *
+	 * @param <T> the generic type
+	 * @param consumer the consumer
+	 * @param executor the executor
+	 * @return the queued consumer
+	 */
+	public static <T> QueuedConsumer<T> of(Consumer<T> consumer,
+			ExecutorService executor) {
+		return new QueuedConsumer<>(consumer, null, executor);
 	}
 
 	/**
@@ -75,12 +153,12 @@ public class QueuedConsumer<T> implements Consumer<T> {
 	private void run() {
 		try {
 			while (true) {
-				Event<T> e = queue.take();
+				T t = queue.take();
 				if (stop.get())
 					break;
-				if (e.equals(Event.KILL_EVENT))
+				this.consumer.accept(t);
+				if (whenToStop.test(t))
 					break;
-				this.consumer.accept(e.get());
 			}
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
@@ -93,60 +171,5 @@ public class QueuedConsumer<T> implements Consumer<T> {
 	 */
 	public void stop() {
 		this.stop.set(true);
-	}
-
-	/**
-	 * Finish.
-	 */
-	@SuppressWarnings("unchecked")
-	public void finish() {
-		try {
-			this.queue.put(Event.KILL_EVENT);
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * The Class Event.
-	 *
-	 * @param <T>
-	 *            the generic type
-	 */
-	private final static class Event<T> {
-		
-		/** The Constant KILL_EVENT. */
-		@SuppressWarnings("rawtypes")
-		public static final Event KILL_EVENT = new Event();
-		
-		/** The t. */
-		private T t;
-
-		/**
-		 * Instantiates a new event.
-		 */
-		private Event() {
-		}
-
-		/**
-		 * Instantiates a new event.
-		 *
-		 * @param t
-		 *            the t
-		 */
-		private Event(T t) {
-			this();
-			this.t = t;
-		}
-
-		/**
-		 * Gets the.
-		 *
-		 * @return the t
-		 */
-		public T get() {
-			return t;
-		}
 	}
 }
